@@ -1,0 +1,92 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    font-family:'Times New Roman', Times, serif;
+}
+
+body{
+    background: linear-gradient(135deg, #2c2c2c, #1a1a1a);
+    color: white;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container{
+   display: flex;
+   flex-direction: column;
+   gap: 1.2rem;
+   background-color: rgba(0, 0, 0, 0.5);
+   padding: 25px;
+   border-radius: 10px;
+   width: 50%;
+   max-width: 600px;
+}
+
+h1{
+    text-align: center;
+}
+
+.user-input-container{
+    display: flex;
+    gap: 10px;
+}
+
+#user-input{
+    flex: 1;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: none;
+}
+
+#search-btn{
+    padding: 0.5rem;
+    border-radius:5px;
+    border: none;
+    cursor: pointer;
+    background-color: #00c896;
+    color: white;
+}
+
+/* 🔥 circle */
+.circle{
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background: conic-gradient(
+        #00ff88 var(--progress-degree, 0%),
+        #2f2f2f 0%
+    );
+}
+
+.circle::before{
+    content: "";
+    position: absolute;
+    width: 85%;
+    height: 85%;
+    background-color: #1a1a1a;
+    border-radius: 50%;
+}
+
+.circle span, .circle p{
+    position: relative;
+    z-index: 2;
+}
+
+.progress{
+    display:flex;
+    justify-content: space-evenly;
+    margin-top: 20px;
+}
+
+.stats-card{
+    margin-top: 20px;
+}

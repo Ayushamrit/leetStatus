@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeetStatus</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>LeetStatus</h1>
+
+    <div class="user-container">
+        <p>Enter username:</p>
+        <div class="user-input-container">
+            <input type="text" placeholder="username" id="user-input">
+            <button id="search-btn">Search</button>
+        </div>
+    </div>
+
+    <div class="stats-container">
+        <div class="progress">
+
+            <div class="circle" id="easy-circle">
+                <span id="easy-label">0</span>
+                <p>Easy</p>
+            </div>
+
+            <div class="circle" id="medium-circle">
+                <span id="medium-label">0</span>
+                <p>Medium</p>
+            </div>
+
+            <div class="circle" id="hard-circle">
+                <span id="hard-label">0</span>
+                <p>Hard</p>
+            </div>
+
+        </div>
+
+        <div class="stats-card"></div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
