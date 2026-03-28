@@ -1,46 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LeetStatus</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LeetStatus</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <div class="container">
-    <h1>LeetStatus</h1>
+  <div class="header">
+    <div class="logo">Leet<span>Status</span></div>
+    <div class="tagline">LeetCode profile stats viewer</div>
+  </div>
 
-    <div class="user-container">
-        <p>Enter username:</p>
-        <div class="user-input-container">
-            <input type="text" placeholder="username" id="user-input">
-            <button id="search-btn">Search</button>
-        </div>
+  <div class="search-box">
+    <input type="text" id="user-input" placeholder="enter username..." autocomplete="off" />
+    <button id="search-btn">SEARCH</button>
+  </div>
+
+  <!-- Loading state -->
+  <div class="panel" id="loading-panel">
+    <div class="status-msg">
+      <div class="loading-dots">
+        <span></span><span></span><span></span>
+      </div>
+      <p style="color:var(--muted);margin-top:10px;font-size:0.72rem;">fetching stats...</p>
+    </div>
+  </div>
+
+  <!-- Error state -->
+  <div class="panel" id="error-panel">
+    <div class="status-msg error-msg" id="error-msg"></div>
+  </div>
+
+  <!-- Results -->
+  <div class="panel" id="result-panel">
+    <div class="user-bar">
+      <div class="username" id="res-username"></div>
+      <div class="ranking-badge">Rank #<span id="res-rank">—</span></div>
     </div>
 
-    <div class="stats-container">
-        <div class="progress">
-
-            <div class="circle" id="easy-circle">
-                <span id="easy-label">0</span>
-                <p>Easy</p>
-            </div>
-
-            <div class="circle" id="medium-circle">
-                <span id="medium-label">0</span>
-                <p>Medium</p>
-            </div>
-
-            <div class="circle" id="hard-circle">
-                <span id="hard-label">0</span>
-                <p>Hard</p>
-            </div>
-
+    <div class="rings-row">
+      <!-- Easy -->
+      <div class="ring-cell">
+        <div class="ring-wrap">
+          <svg class="ring-svg" viewBox="0 0 90 90">
+            <circle class="ring-track" cx="45" cy="45" r="38" />
+            <circle class="ring-fill" id="easy-ring" cx="45" cy="45" r="38"
+                    stroke="var(--easy)"
+                    stroke-dasharray="238.76"
+                    stroke-dashoffset="238.76" />
+          </svg>
+          <div class="ring-center">
+            <span class="ring-count" id="easy-count" style="color:var(--easy)">0</span>
+          </div>
         </div>
+        <div class="ring-label">Easy</div>
+      </div>
 
-        <div class="stats-card"></div>
+      <!-- Medium -->
+      <div class="ring-cell">
+        <div class="ring-wrap">
+          <svg class="ring-svg" viewBox="0 0 90 90">
+            <circle class="ring-track" cx="45" cy="45" r="38" />
+            <circle class="ring-fill" id="medium-ring" cx="45" cy="45" r="38"
+                    stroke="var(--medium)"
+                    stroke-dasharray="238.76"
+                    stroke-dashoffset="238.76" />
+          </svg>
+          <div class="ring-center">
+            <span class="ring-count" id="medium-count" style="color:var(--medium)">0</span>
+          </div>
+        </div>
+        <div class="ring-label">Medium</div>
+      </div>
+
+      <!-- Hard -->
+      <div class="ring-cell">
+        <div class="ring-wrap">
+          <svg class="ring-svg" viewBox="0 0 90 90">
+            <circle class="ring-track" cx="45" cy="45" r="38" />
+            <circle class="ring-fill" id="hard-ring" cx="45" cy="45" r="38"
+                    stroke="var(--hard)"
+                    stroke-dasharray="238.76"
+                    stroke-dashoffset="238.76" />
+          </svg>
+          <div class="ring-center">
+            <span class="ring-count" id="hard-count" style="color:var(--hard)">0</span>
+          </div>
+        </div>
+        <div class="ring-label">Hard</div>
+      </div>
     </div>
+
+    <div class="stats-row">
+      <div class="stat-cell">
+        <div class="stat-key">Total Solved</div>
+        <div class="stat-val" id="res-total">—</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-key">Acceptance</div>
+        <div class="stat-val" id="res-acceptance">—</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-key">Contribution</div>
+        <div class="stat-val" id="res-contribution">—</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script src="script.js"></script>

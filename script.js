@@ -1,66 +1,71 @@
-const searchBtn = document.getElementById("search-btn");
-const usernameInput = document.getElementById("user-input");
-
-const easyLabel = document.getElementById("easy-label");
-const mediumLabel = document.getElementById("medium-label");
-const hardLabel = document.getElementById("hard-label");
-
-const easyCircle = document.getElementById("easy-circle");
-const mediumCircle = document.getElementById("medium-circle");
-const hardCircle = document.getElementById("hard-circle");
-
-const statsCard = document.querySelector(".stats-card");
-
 const API_URL = "https://leetcode-stats-api.herokuapp.com/";
+const CIRCUMFERENCE = 238.76; // 2 * PI * 38
 
-searchBtn.addEventListener("click", () => {
-    const username = usernameInput.value.trim();
+const searchBtn    = document.getElementById("search-btn");
+const userInput    = document.getElementById("user-input");
 
-    if (username === "") {
-        alert("Enter username");
-        return;
-    }
+const loadingPanel = document.getElementById("loading-panel");
+const errorPanel   = document.getElementById("error-panel");
+const resultPanel  = document.getElementById("result-panel");
+const errorMsg     = document.getElementById("error-msg");
 
-    fetchData(username);
-});
+function showPanel(which) {
+  [loadingPanel, errorPanel, resultPanel].forEach(p => p.classList.remove("visible"));
+  which.classList.add("visible");
+}
+
+function setRing(ringEl, percent) {
+  const offset = CIRCUMFERENCE * (1 - percent / 100);
+  ringEl.style.strokeDashoffset = offset;
+}
 
 async function fetchData(username) {
-    try {
-        statsCard.innerHTML = "Loading...";
+  showPanel(loadingPanel);
 
-        const response = await fetch(API_URL + username);
+  try {
+    const res = await fetch(API_URL + username);
+    if (!res.ok) throw new Error("User not found");
 
-        if (!response.ok) {
-            throw new Error("User not found");
-        }
+    const data = await res.json();
+    if (data.status === "error") throw new Error(data.message || "User not found");
 
-        const data = await response.json();
-
-        displayData(data);
-
-    } catch (error) {
-        statsCard.innerHTML = `<p style="color:red;">${error.message}</p>`;
-    }
+    displayData(username, data);
+  } catch (err) {
+    errorMsg.textContent = `⚠ ${err.message}`;
+    showPanel(errorPanel);
+  }
 }
 
-function displayData(data) {
-    let total = data.totalSolved;
+function displayData(username, data) {
+  document.getElementById("res-username").textContent    = username;
+  document.getElementById("res-rank").textContent        = data.ranking?.toLocaleString() ?? "—";
+  document.getElementById("res-total").textContent       = data.totalSolved ?? "—";
+  document.getElementById("res-acceptance").textContent  = data.acceptanceRate != null ? data.acceptanceRate + "%" : "—";
+  document.getElementById("res-contribution").textContent = data.contributionPoints ?? "—";
 
-    easyLabel.textContent = data.easySolved;
-    mediumLabel.textContent = data.mediumSolved;
-    hardLabel.textContent = data.hardSolved;
+  document.getElementById("easy-count").textContent   = data.easySolved   ?? 0;
+  document.getElementById("medium-count").textContent = data.mediumSolved ?? 0;
+  document.getElementById("hard-count").textContent   = data.hardSolved   ?? 0;
 
-    let easyPercent = (data.easySolved / total) * 100;
-    let mediumPercent = (data.mediumSolved / total) * 100;
-    let hardPercent = (data.hardSolved / total) * 100;
+  const total = data.totalSolved || 1;
 
-    easyCircle.style.setProperty("--progress-degree", easyPercent + "%");
-    mediumCircle.style.setProperty("--progress-degree", mediumPercent + "%");
-    hardCircle.style.setProperty("--progress-degree", hardPercent + "%");
+  showPanel(resultPanel);
 
-    statsCard.innerHTML = `
-        <p>Total Solved: ${data.totalSolved}</p>
-        <p>Ranking: ${data.ranking}</p>
-        <p>Acceptance Rate: ${data.acceptanceRate}%</p>
-    `;
+  // Small delay so the animation plays after panel fades in
+  setTimeout(() => {
+    setRing(document.getElementById("easy-ring"),   (data.easySolved   / total) * 100);
+    setRing(document.getElementById("medium-ring"), (data.mediumSolved / total) * 100);
+    setRing(document.getElementById("hard-ring"),   (data.hardSolved   / total) * 100);
+  }, 80);
 }
+
+function handleSearch() {
+  const username = userInput.value.trim();
+  if (!username) { userInput.focus(); return; }
+  fetchData(username);
+}
+
+searchBtn.addEventListener("click", handleSearch);
+userInput.addEventListener("keydown", e => {
+  if (e.key === "Enter") handleSearch();
+});
